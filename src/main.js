@@ -25,17 +25,26 @@ new svgMap({
 	countryNames,
 });
 
-document.querySelectorAll('path.svgMap-country').forEach((country) => {
-	country.addEventListener('click', (e) => {
-		const countryCode = e.target.getAttribute('data-id');
-		const countryName = countryNames[countryCode];
+function onClick(e) {
+	if (!e.target) {
+		return;
+	}
 
-		if (countryName.length > 0) {
-			const audio = new SpeechSynthesisUtterance(countryName);
-			audio.lang = 'pl-PL';
-			audio.pitch = 0.8;
-			audio.rate = 0.8;
-			window.speechSynthesis.speak(audio);
-		}
-	});
-});
+	const countryCode = e.target.getAttribute('data-id');
+	const countryName = countryNames[countryCode];
+
+	if (countryName.length > 0) {
+		const audio = new SpeechSynthesisUtterance(countryName);
+		audio.lang = 'pl-PL';
+		audio.pitch = 0.8;
+		audio.rate = 0.8;
+		window.speechSynthesis.speak(audio);
+	}
+}
+
+document
+	.querySelectorAll('.svgMap-country')
+	.forEach(() => addEventListener('mouseup', onClick));
+document
+	.querySelectorAll('.svgMap-country')
+	.forEach(() => addEventListener('touchstart', onClick));
