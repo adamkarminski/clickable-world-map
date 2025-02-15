@@ -2,30 +2,22 @@ import './styles.css';
 import countryNames from './countriesPL';
 import values from './data';
 
+import EasySpeech from 'easy-speech';
+
 new svgMap({
 	targetElementID: 'svgMap',
 	data: {
 		data: {
-			gdp: {
-				name: 'GDP per capita',
-				format: '{0} USD',
-				thousandSeparator: ',',
-				thresholdMax: 50000,
-				thresholdMin: 1000,
-			},
-			change: {
-				name: 'Change to year before',
-				format: '{0} %',
-			},
+			continents: {},
 		},
-		applyData: 'gdp',
+		applyData: 'continents',
 		values,
 	},
 	hideMissingData: true,
 	countryNames,
 });
 
-function onClick(e) {
+async function onClick(e) {
 	if (!e.target) {
 		return;
 	}
@@ -34,17 +26,30 @@ function onClick(e) {
 	const countryName = countryNames[countryCode];
 
 	if (countryName.length > 0) {
-		const audio = new SpeechSynthesisUtterance(countryName);
-		audio.lang = 'pl-PL';
-		audio.pitch = 0.8;
-		audio.rate = 0.8;
-		window.speechSynthesis.speak(audio);
+		await EasySpeech.speak({ text: countryName });
 	}
 }
 
-document
-	.querySelectorAll('.svgMap-country')
-	.forEach(() => addEventListener('mouseup', onClick));
-document
-	.querySelectorAll('.svgMap-country')
-	.forEach(() => addEventListener('touchstart', onClick));
+EasySpeech.detect();
+
+EasySpeech.init({ maxTimeout: 5000, interval: 250 })
+	.then(() => {
+		const voice = EasySpeech.voices().filter(
+			(voice) => voice.lang && voice.lang.startsWith('pl')
+		)[0];
+
+		EasySpeech.defaults({
+			voice,
+			pitch: 0.9,
+			rate: 0.8,
+			volume: 1,
+		});
+
+		document
+			.querySelectorAll('.svgMap-country')
+			.forEach(() => addEventListener('mouseup', onClick));
+		document
+			.querySelectorAll('.svgMap-country')
+			.forEach(() => addEventListener('touchstart', onClick));
+	})
+	.catch((e) => console.error(e));
