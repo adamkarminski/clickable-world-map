@@ -50,6 +50,6 @@ EasySpeech.init({ maxTimeout: 5000, interval: 250 })
 			.forEach(() => addEventListener('mouseup', onClick));
 		document
 			.querySelectorAll('.svgMap-country')
-			.forEach(() => addEventListener('touchstart', onClick));
+			.forEach(() => addEventListener('touchend', onClick));
 	})
 	.catch((e) => console.error(e));
