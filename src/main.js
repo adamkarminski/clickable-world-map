@@ -1,6 +1,7 @@
 import './styles.css';
 import countryNames from './countriesPL';
 import values from './data';
+import capitals from './capitals';
 
 import EasySpeech from 'easy-speech';
 
@@ -24,9 +25,10 @@ async function onClick(e) {
 
 	const countryCode = e.target.getAttribute('data-id');
 	const countryName = countryNames[countryCode];
+	const countryCapital = capitals[countryCode].capital;
 
 	if (countryName.length > 0) {
-		await EasySpeech.speak({ text: countryName });
+		await EasySpeech.speak({ text: `${countryName}. Stolica: ${countryCapital}` });
 	}
 }
 
