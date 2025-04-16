@@ -24,11 +24,11 @@ async function onClick(e) {
 	}
 
 	const countryCode = e.target.getAttribute('data-id');
-	const countryName = countryNames[countryCode];
-	const countryCapital = capitals[countryCode].capital;
 
-	if (countryName.length > 0) {
-		await EasySpeech.speak({ text: `${countryName}. Stolica: ${countryCapital}` });
+	if (countryNames[countryCode].length > 0) {
+		await EasySpeech.speak({
+			text: `${countryNames[countryCode]}. Stolica: ${capitals[countryCode].capital}. Kontynent: ${capitals[countryCode].continent}.`,
+		});
 	}
 }
 
